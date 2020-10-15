@@ -14,14 +14,15 @@ import org.springframework.ui.Model;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anySet;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+/**
+ * Created by jt on 6/17/17.
+ */
 public class IndexControllerTest {
 
     @Mock
@@ -49,9 +50,9 @@ public class IndexControllerTest {
     }
 
     @Test
-    public void getIndexPage() {
+    public void getIndexPage() throws Exception {
 
-        // Given
+        //given
         Set<Recipe> recipes = new HashSet<>();
         recipes.add(new Recipe());
 
@@ -64,14 +65,16 @@ public class IndexControllerTest {
 
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
-        // When
+        //when
         String viewName = controller.getIndexPage(model);
 
-        // Then
+
+        //then
         assertEquals("index", viewName);
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-        Set<Recipe> setController = argumentCaptor.getValue();
-        assertEquals(2, setController.size());
+        Set<Recipe> setInController = argumentCaptor.getValue();
+        assertEquals(2, setInController.size());
     }
+
 }
